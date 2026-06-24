@@ -2,7 +2,7 @@
 <html lang="mn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>3D Photo Sphere</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
@@ -12,42 +12,90 @@ body{
 }
 #scene{position:absolute;inset:0;}
 
+/* ---- Утсаа хөндлөн харуулахыг шаардах дэлгэц ---- */
+#orientationOverlay {
+  position: fixed;
+  inset: 0;
+  background: #050505;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+.phone-icon {
+  width: 60px;
+  height: 100px;
+  border: 3px solid #ff4fa3;
+  border-radius: 10px;
+  animation: rotatePhone 2s ease-in-out infinite;
+  margin-bottom: 20px;
+  position: relative;
+}
+.phone-icon::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: #ff4fa3;
+  border-radius: 50%;
+}
+@keyframes rotatePhone {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-90deg); }
+  100% { transform: rotate(-90deg); }
+}
+#orientationOverlay p {
+  font-size: 18px;
+  color: #ff9ed3;
+  text-shadow: 0 0 10px #ff4fa3;
+  letter-spacing: 1px;
+}
+
+/* ---- Үндсэн контентууд ---- */
 .profile{position:absolute;top:50%;transform:translateY(-50%);z-index:10;text-align:center;transition:opacity 0.8s ease;}
-.left{left:5%;}
-.right{right:5%;}
+.left{left:8%;}
+.right{right:8%;}
 .profile img{
-  width:180px;height:180px;border-radius:50%;object-fit:cover;
+  width: 140px; height: 140px; /* Хөндлөн дэлгэцэнд зориулж хэмжээг бага зэрэг тааруулав */
+  border-radius:50%;object-fit:cover;
   border:4px solid #ff4fa3;
   box-shadow:0 0 15px #ff4fa3,0 0 30px #ff4fa3;
   animation:float 4s ease-in-out infinite;
 }
-.profile h2{margin-top:15px;font-size:30px;color:#ff9ed3;text-shadow:0 0 10px #ff4fa3;}
+.profile h2{margin-top:15px;font-size:24px;color:#ff9ed3;text-shadow:0 0 10px #ff4fa3;}
 .profile.hidden{opacity:0;pointer-events:none;}
 
-.centerText{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;z-index:20;pointer-events:none;transition:opacity 0.8s ease;}
-.centerText small{display:block;font-size:18px;color:white;margin-bottom:10px;letter-spacing:2px;}
-.centerText h1{font-size:55px;color:#ff7ac0;text-shadow:0 0 10px #ff4fa3,0 0 30px #ff4fa3;}
+.centerText{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);text-align:center;z-index:20;pointer-events:none;transition:opacity 0.8s ease;}
+.centerText small{display:block;font-size:16px;color:white;margin-bottom:10px;letter-spacing:2px;}
+.centerText h1{font-size:45px;color:#ff7ac0;text-shadow:0 0 10px #ff4fa3,0 0 30px #ff4fa3;}
 .centerText.hidden{opacity:0;}
 
 #giftContainer{
   position:fixed;inset:0;display:flex;flex-direction:column;
   justify-content:center;align-items:center;background:black;z-index:9999;cursor:pointer;
 }
-#giftBox{position:relative;width:180px;height:180px;}
+#giftBox{position:relative;width:150px;height:150px;}
 .box{
-  position:absolute;bottom:0;width:180px;height:120px;
+  position:absolute;bottom:0;width:150px;height:100px;
   background:#ff4fa3;border-radius:10px;box-shadow:0 0 40px #ff4fa3;
 }
-.box::before{content:"";position:absolute;left:50%;top:0;width:20px;height:100%;background:white;transform:translateX(-50%);}
+.box::before{content:"";position:absolute;left:50%;top:0;width:16px;height:100%;background:white;transform:translateX(-50%);}
 .lid{
-  position:absolute;top:25px;width:180px;height:45px;
+  position:absolute;top:20px;width:150px;height:35px;
   background:#ff79c3;border-radius:10px;transform-origin:left center;transition:1s;
   box-shadow:0 0 30px #ff79c3;
 }
-.lid::before{content:"";position:absolute;left:50%;width:20px;height:100%;background:white;transform:translateX(-50%);}
-.giftText{margin-top:40px;font-size:24px;color:white;animation:pulse 1s infinite;}
+.lid::before{content:"";position:absolute;left:50%;width:16px;height:100%;background:white;transform:translateX(-50%);}
+.giftText{margin-top:30px;font-size:20px;color:white;animation:pulse 1s infinite;}
 @keyframes pulse{50%{opacity:.4;}}
-.open .lid{transform:rotate(-130deg) translateY(-60px);}
+.open .lid{transform:rotate(-130deg) translateY(-50px);}
 .hideGift{animation:giftFade 1s forwards;}
 @keyframes giftFade{to{opacity:0;visibility:hidden;}}
 @keyframes float{50%{transform:translateY(-12px);}}
@@ -60,6 +108,12 @@ body{
 </style>
 </head>
 <body>
+
+<!-- Хөндлөн харуулахыг шаардах хэсэг -->
+<div id="orientationOverlay">
+  <div class="phone-icon"></div>
+  <p>Утсаа хөндлөн (Landscape) харуулж үзнэ үү ❤️</p>
+</div>
 
 <div id="flashOverlay"></div>
 
@@ -88,6 +142,21 @@ body{
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
+
+/* ---- Дэлгэцийн эргэлт шалгах ложик ---- */
+const overlay = document.getElementById("orientationOverlay");
+function checkOrientation() {
+  // Өргөн нь өндрөөсөө их байвал хөндлөн байна гэж үзнэ
+  if (window.innerWidth > window.innerHeight) {
+    overlay.style.opacity = "0";
+    setTimeout(() => { overlay.style.display = "none"; }, 500);
+  } else {
+    overlay.style.display = "flex";
+    setTimeout(() => { overlay.style.opacity = "1"; }, 10);
+  }
+}
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("load", checkOrientation);
 
 /* ---- Огноо тоолуур ---- */
 const startDate = new Date("2018-12-24");
@@ -143,14 +212,13 @@ scene.add(heart);
 
 let formation = 0;
 
-/* ---- 30 ЗУРГИЙГ ЦУЛ БӨМБӨРЦӨГ БОЛГОХ ШИНЭ АЛГОРИТМ ---- */
+/* ---- 30 ЗУРГИЙГ ЦУЛ БӨМБӨРЦӨГ БОЛГОХ АЛГОРИТМ ---- */
 const mainSphereGroup = new THREE.Group();
 scene.add(mainSphereGroup);
 
 const TOTAL_PHOTOS = 30;
 const RADIUS = 160;
 
-// Зургуудыг уруугаа харахгүй, гажихгүй байх үүднээс Canvas ашиглан нэг том цул Бөмбөрцөг материал үүсгэнэ
 const canvas = document.createElement('canvas');
 canvas.width = 2048;
 canvas.height = 1024;
@@ -165,15 +233,11 @@ const finalSphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
 finalSphereMesh.visible = false;
 mainSphereGroup.add(finalSphereMesh);
 
-// Сарних анимацид зориулсан 30 ширхэг түр зуурын хавтгай зургууд
 const scatterGroup = new THREE.Group();
 scene.add(scatterGroup);
 const scatterMeshes = [];
-const loader = new THREE.TextureLoader();
 
-// Бөмбөрцгийг бүтэн дүүргэх сүлжээ (6 үе)
 const rows = [2, 5, 8, 8, 5, 2];
-let loadedCount = 0;
 let imgIndex = 0;
 
 for (let r = 0; r < rows.length; r++) {
@@ -185,18 +249,15 @@ for (let r = 0; r < rows.length; r++) {
     const img = new Image();
     img.src = `zurag${currentIdx + 1}.jpg`;
     
-    // Бөмбөрцөг дээрх заадасгүй байрлалын тооцоо
     const imgWidth = canvas.width / rowCount;
     const imgHeight = canvas.height / rows.length;
     const imgX = c * imgWidth;
     const imgY = r * imgHeight;
     
     img.onload = function() {
-      // 1. Цул бөмбөрцгийн мап дээр зургийг зөв харуулан зурах (Уруугаа харахгүй)
       ctx.drawImage(this, imgX, imgY, imgWidth, imgHeight);
       mainTexture.needsUpdate = true;
       
-      // 2. Сарних үеийн тусдаа хавтгайнуудыг үүсгэх
       const pGeo = new THREE.PlaneGeometry(65, 65);
       const pMat = new THREE.MeshBasicMaterial({map: new THREE.Texture(this), side: THREE.DoubleSide});
       pMat.map.needsUpdate = true;
@@ -206,7 +267,6 @@ for (let r = 0; r < rows.length; r++) {
       pMesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
       pMesh.visible = false;
       
-      // Эцсийн очих цэг (Бөмбөрцөг гадаргуу дээрх цэг)
       const phi = Math.PI * (r + 0.5) / rows.length;
       const theta = (c / rowCount) * Math.PI * 2;
       pMesh.userData = {
@@ -237,7 +297,6 @@ function animate(){
 
   const hPos = heartGeo.attributes.position.array;
 
-  /* PHASE 1: Зүрх эвлэрэх */
   if(phase===1){
     if(formation < 1){
       formation += 0.003;
@@ -252,7 +311,6 @@ function animate(){
     }
   }
 
-  /* PHASE 2: Зүрх эргэлдэх */
   if(phase===2){
     heart.rotation.y += 0.006;
     if(phaseTimer > 500){
@@ -271,7 +329,6 @@ function animate(){
     }
   }
 
-  /* PHASE 3: Зүрх сарних, Хавтгай зургууд төв рүү цуглах */
   if(phase===3){
     for(let i=0;i<COUNT;i++){
       hPos[i*3+0] += (targets[i].x - hPos[i*3+0])*0.05;
@@ -292,20 +349,16 @@ function animate(){
     }
   }
 
-  /* PHASE 4: Түр зуурын хавтгайг устгаж, төгс Цул бөмбөрцгийг харуулах */
   if(phase===4){
-    scatterMeshes.forEach(m => m.visible = false); // Сарнисан хавтгайнуудыг нууна
-    finalSphereMesh.visible = true; // Цул төгс бөмбөрцгийг гаргаж ирнэ
-    
+    scatterMeshes.forEach(m => m.visible = false);
+    finalSphereMesh.visible = true;
     sphereMat.opacity = Math.min(1, sphereMat.opacity + 0.05);
-    
     if(phaseTimer === 20){ triggerFlash(400); }
     if(sphereMat.opacity >= 1 && phaseTimer > 40){
       phase=5; phaseTimer=0;
     }
   }
 
-  /* PHASE 5: Яг таг наалдсан, заадасгүй, зөв харсан цул бөмбөрцөг эргэх */
   if(phase===5){
     mainSphereGroup.rotation.y += 0.003;
     mainSphereGroup.rotation.x = Math.sin(Date.now()*0.0002)*0.05;
@@ -332,7 +385,7 @@ document.getElementById("giftContainer").addEventListener("click",()=>{
   },1000);
 });
 
-/* ---- Дэлгэцийн хэмжээ ---- */
+/* ---- Дэлгэцийн хэмжээ өөрчлөгдөхөд 3D Сэтийг дахин тохируулах ---- */
 window.addEventListener('resize',()=>{
   camera.aspect=window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
